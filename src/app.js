@@ -1,26 +1,10 @@
-import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { engine } from 'express-handlebars';
-import viewsRouter from './routes/views.router.js';
+import app from './expressApp.js';
 import productManager from './managers/ProductManagerSingleton.js';
 
-const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-
-// Configuración de Handlebars
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', './src/views');
-
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('./src/public'));
-
-// Rutas
-app.use('/', viewsRouter);
 
 // WebSocket connection
 io.on('connection', (socket) => {
